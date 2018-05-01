@@ -1,0 +1,21 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+
+Description: cfn-customresources
+Resources:
+  CustomResourceHandler:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: src/CustomResource.request
+      Runtime: nodejs6.10
+      Timeout : 5
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - AmazonElasticTranscoderFullAccess
+        - AmazonAPIGatewayAdministrator
+      CodeUri: .
+Outputs:
+  Arn:
+    Value: !GetAtt CustomResourceHandler.Arn
+    Export:
+      Name: CustomResourceHandlerArn
