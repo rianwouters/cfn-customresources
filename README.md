@@ -6,10 +6,10 @@ The included template.yml can be use to create a custom resource handler stack.
 It outputs CustomResourceHandlerArn so that it can be used as a separate (nested) stack.
 
 Currently supported resources types:
-- Custom::AWS-ElasticTranscoder-Pipeline
-- Custom::AWS-ElasticTranscoder-Preset
-- Custom::AWS-APIGateway-Deployment
-- Custom::AWS-APIGateway-ApiKey
+- ```Custom::AWS-ElasticTranscoder-Pipeline```
+- ```Custom::AWS-ElasticTranscoder-Preset```
+- ```Custom::AWS-APIGateway-Deployment```
+- ```Custom::AWS-APIGateway-ApiKey```
 
 Notes:
 - unfortunately due to a limitation of CloudFormation, '::' cannot be used as a separator.
@@ -110,7 +110,7 @@ This makes the deployment nicely appear in the AWS API Gateway console with desc
 CloudFormation calls CustomResource.request to create/update/delete a resource.
 It acts as a factory method that creates a CustomResource instance based on the resource type.
 It does this by removing the 'Custom::' prefix, and splitting the type into [brand, service, resource] based on the '-' separator.
-urrently this is mapped on the ${service}${resource} class. In the future it will be mapped on the directory structure.
+Currently this is mapped on the ${service}${resource} class. In the future it will be mapped on the directory structure.
 The cfn-response module is used to send responses to the CloudFormation request.
 Implementations of a resource type are currently based on 3 base classes.
 
