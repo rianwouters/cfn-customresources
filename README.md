@@ -89,7 +89,7 @@ sed -e 's/\(.*\)${[[:space:]]*env:[[:space:]]*\([[:graph:]]\+\)[[:space:]]*}/ech
 ```
 
 It needs to be excuted before packaging and executing the template.
-This makes the deployment nicely appear in the AWS API Gateway console with description 'version <git commit SHA>'
+This makes the deployment nicely appear in the AWS API Gateway console with description 'version \<git commit SHA\>'
 
 ### Custom::AWS-APIGateway-ApiKey
 
@@ -127,6 +127,7 @@ A custom resource implementation that maps a resource type on the AWS[Service].[
 As an example, the APIGatewayDeployment class uses this base class with custom delete parameters.
 
 Updating a resource is implemented by first trying to delete the current resource. In any case a new resource is created.
+Note that in case the resource cannot be deleted, cloudformation will normally delete it in its cleanup phase if the resource that was referring to it, has freed its reference. 
  
 ### CustomUpdatableAWSResource
 A CustomAWSResource that updates a resource by using the update<Resource> method of the associated SDK service.
