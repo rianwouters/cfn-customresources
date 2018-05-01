@@ -132,6 +132,7 @@ Updating a resource is implemented by first trying to delete the current resourc
 A CustomAWSResource that updates a resource by using the update<Resource> method of the associated SDK service.
 
 ## TODOs
-- move classes into a package directory hierarchy (AWS/ElasticTranscoder/Pipeline, etc.)
+- Move classes into a package directory hierarchy (AWS/ElasticTranscoder/Pipeline, etc.)
+- Write unit tests. This module should have been developed with TDD of course :-(
 
 
