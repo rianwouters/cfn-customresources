@@ -3,7 +3,7 @@ Generic framework for creating AWS CloudFormation custom resources
 
 This module contains an extensible framework for creating AWS CloudFormation custom resource handlers.
 The included template.yml can be used to create a custom resource handler stack.
-It outputs CustomResourceHandlerArn so that it can be used as a separate (nested) stack.
+It outputs the ServiceToken so that it can be used as a nested stack.
 
 Currently supported resources types:
 - ```Custom::AWS-ElasticTranscoder-Pipeline```

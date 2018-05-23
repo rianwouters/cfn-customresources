@@ -15,5 +15,5 @@ Resources:
         - AmazonAPIGatewayAdministrator
       CodeUri: .
 Outputs:
-  Arn:
+  ServiceToken:
     Value: !GetAtt CustomResourceHandler.Arn
