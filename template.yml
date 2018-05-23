@@ -17,5 +17,3 @@ Resources:
 Outputs:
   Arn:
     Value: !GetAtt CustomResourceHandler.Arn
-    Export:
-      Name: CustomResourceHandlerArn
