@@ -1,0 +1,15 @@
+{
+  "name": "cfn-customresources",
+  "version": "1.0.0",
+  "description": "Generic framework for creating AWS CloudFormation custom resources",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rianwouters/cfn-customresources.git"
+  },
+  "author": "Rian Wouters",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rianwouters/cfn-customresources/issues"
+  },
+  "homepage": "https://github.com/rianwouters/cfn-customresources#readme"
+}
