@@ -11,7 +11,7 @@ Resources:
       Timeout : 5
       Policies:
         - AWSLambdaBasicExecutionRole
-        - AmazonElasticTranscoderFullAccess
+        - AmazonElasticTranscoder_FullAccess
         - AmazonAPIGatewayAdministrator
       CodeUri: .
 Outputs:
