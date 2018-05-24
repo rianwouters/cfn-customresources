@@ -7,9 +7,9 @@ Resources:
     Type: AWS::IAM::Role
     Properties:
       ManagedPolicyArns:
-      - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
-      - arn:aws:iam::aws:policy/service-role/AmazonElasticTranscoder_FullAccess
-      - arn:aws:iam::aws:policy/service-role/AmazonAPIGatewayAdministrator
+      - arn:aws:iam::aws:policy/AWSLambdaBasicExecutionRole
+      - arn:aws:iam::aws:policy/AmazonElasticTranscoder_FullAccess
+      - arn:aws:iam::aws:policy/AmazonAPIGatewayAdministrator
       AssumeRolePolicyDocument:
         Version: '2012-10-17'
         Statement:
