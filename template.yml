@@ -6,12 +6,8 @@ Resources:
   CustomResourceHandlerRole:
     Type: AWS::IAM::Role
     Properties:
-      ManagedPolicyArns:
-      - arn:aws:iam::aws:policy/AWSLambdaBasicExecutionRole
-      - arn:aws:iam::aws:policy/AmazonElasticTranscoder_FullAccess
-      - arn:aws:iam::aws:policy/AmazonAPIGatewayAdministrator
       AssumeRolePolicyDocument:
-        Version: '2012-10-17'
+        Version: 2012-10-17
         Statement:
         - Action:
           - sts:AssumeRole
@@ -19,6 +15,10 @@ Resources:
           Principal:
             Service:
             - lambda.amazonaws.com
+      ManagedPolicyArns:
+      - arn:aws:iam::aws:policy/AWSLambdaBasicExecutionRole
+      - arn:aws:iam::aws:policy/AmazonElasticTranscoder_FullAccess
+      - arn:aws:iam::aws:policy/AmazonAPIGatewayAdministrator
   CustomResourceHandler:
     Type: AWS::Lambda::Function
     Properties:
