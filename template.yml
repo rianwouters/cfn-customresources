@@ -1,19 +1,46 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Transform: AWS::Serverless-2016-10-31
+#Transform: AWS::Serverless-2016-10-31
 
 Description: cfn-customresources
 Resources:
+  CustomResourceHandlerRole:
+    Type: AWS::IAM::Role
+    Properties:
+      ManagedPolicyArns:
+      - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+      - arn:aws:iam::aws:policy/service-role/AmazonElasticTranscoder_FullAccess
+      - arn:aws:iam::aws:policy/service-role/AmazonAPIGatewayAdministrator
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Action:
+          - sts:AssumeRole
+          Effect: Allow
+          Principal:
+            Service:
+            - lambda.amazonaws.com
   CustomResourceHandler:
-    Type: AWS::Serverless::Function
+    Type: AWS::Lambda::Function
     Properties:
       Handler: src/CustomResource.request
+      Code: .
+      Role: !GetAtt CustomResourceHandlerRole.Arn
       Runtime: nodejs6.10
-      Timeout : 5
-      Policies:
-        - AWSLambdaBasicExecutionRole
-        - AmazonElasticTranscoder_FullAccess
-        - AmazonAPIGatewayAdministrator
-      CodeUri: .
+
+# Unfortunately, can't use the serverless transform in nested stacks.
+#
+#  CustomResourceHandler:
+#    Type: AWS::Serverless::Function
+#    Properties:
+#      Handler: src/CustomResource.request
+#      Runtime: nodejs6.10
+#      Timeout : 5
+#      Policies:
+#        - AWSLambdaBasicExecutionRole
+#        - AmazonElasticTranscoder_FullAccess
+#        - AmazonAPIGatewayAdministrator
+#      CodeUri: .
+
 Outputs:
   ServiceToken:
     Value: !GetAtt CustomResourceHandler.Arn
