@@ -1,6 +1,4 @@
 AWSTemplateFormatVersion: '2010-09-09'
-#Transform: AWS::Serverless-2016-10-31
-
 Description: cfn-customresources
 Resources:
   CustomResourceHandlerRole:
@@ -26,21 +24,6 @@ Resources:
       Code: .
       Role: !GetAtt CustomResourceHandlerRole.Arn
       Runtime: nodejs6.10
-
-# Unfortunately, can't use the serverless transform in nested stacks.
-#
-#  CustomResourceHandler:
-#    Type: AWS::Serverless::Function
-#    Properties:
-#      Handler: src/CustomResource.request
-#      Runtime: nodejs6.10
-#      Timeout : 5
-#      Policies:
-#        - AWSLambdaBasicExecutionRole
-#        - AmazonElasticTranscoder_FullAccess
-#        - AmazonAPIGatewayAdministrator
-#      CodeUri: .
-
 Outputs:
   ServiceToken:
     Value: !GetAtt CustomResourceHandler.Arn
