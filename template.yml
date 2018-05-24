@@ -17,8 +17,8 @@ Resources:
             - lambda.amazonaws.com
       ManagedPolicyArns:
       - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
-      - arn:aws:iam::aws:policy/service-role/AmazonElasticTranscoder_FullAccess
-      - arn:aws:iam::aws:policy/service-role/AmazonAPIGatewayAdministrator
+      - arn:aws:iam::aws:policy/AmazonElasticTranscoder_FullAccess
+      - arn:aws:iam::aws:policy/AmazonAPIGatewayAdministrator
   CustomResourceHandler:
     Type: AWS::Lambda::Function
     Properties:
