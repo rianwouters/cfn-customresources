@@ -12,6 +12,7 @@
     "url": "https://github.com/rianwouters/cfn-customresources/issues"
   },
   "homepage": "https://github.com/rianwouters/cfn-customresources#readme",
+  "config":
   "dependencies": {
     "cfn-response": "^1.0.1"
   }
