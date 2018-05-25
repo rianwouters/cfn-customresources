@@ -1,5 +1,4 @@
 'use strict';
-const AWS = require('aws-sdk');
 const response = require('cfn-response');
 
 module.exports = class CustomResource {
