@@ -1,7 +1,7 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Description: cfn-customresources
 Resources:
-  CustomResourceHandlerRole:
+  Role:
     Type: AWS::IAM::Role
     Properties:
       AssumeRolePolicyDocument:
@@ -17,13 +17,13 @@ Resources:
       - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
       - arn:aws:iam::aws:policy/AmazonElasticTranscoder_FullAccess
       - arn:aws:iam::aws:policy/AmazonAPIGatewayAdministrator
-  CustomResourceHandler:
+  Handler:
     Type: AWS::Lambda::Function
     Properties:
       Handler: src/CustomResource.request
       Code: lambda
-      Role: !GetAtt CustomResourceHandlerRole.Arn
+      Role: !GetAtt Role.Arn
       Runtime: nodejs6.10
 Outputs:
   ServiceToken:
-    Value: !GetAtt CustomResourceHandler.Arn
+    Value: !GetAtt Handler.Arn
