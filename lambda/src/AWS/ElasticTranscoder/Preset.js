@@ -1,9 +1,13 @@
 'use strict';
-const CustomUpdatableAWSResource = require('./CustomUpdatableAWSResource.js');
+const CustomUpdatableAWSResource = require('../../CustomUpdatableAWSResource.js');
 const AWS = require('aws-sdk');
 const et = new AWS.ElasticTranscoder();
 
-module.exports = class ElasticTranscoderPreset extends CustomUpdatableAWSResource {
+module.exports = class Preset extends CustomUpdatableAWSResource {
+
+    constructor() {
+        super('ElasticTranscoder');
+    }
 
     createParams(req) {
         const params = super.createParams(req);

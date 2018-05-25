@@ -3,10 +3,13 @@ const CustomResource = require('./CustomResource.js');
 const AWS = require('aws-sdk');
 
 module.exports = class CustomAWSResource extends CustomResource {
-    constructor(serviceName, type) {
+    constructor(serviceName) {
         super();
-        this.type = type;
         this.service = new AWS[serviceName]();
+    }
+
+    get type() {
+        return this.constructor.name;
     }
 
     serviceMethod(name, type = this.type) {

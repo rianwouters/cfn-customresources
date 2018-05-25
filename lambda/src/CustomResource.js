@@ -2,22 +2,15 @@
 const response = require('cfn-response');
 
 module.exports = class CustomResource {
-    constructor() {
-    }
 
     Name(req) {
         return `${req.StackId.split('/')[1].slice(-13)}-${req.LogicalResourceId.slice(-13)}-${req.RequestId.slice(-12)}`;
     }
 
-    static create(type) {
-        const [brand, service, resource] = type.split('-');
-        // TODO: move into brand/service/resource.js dir
-        const Cls = require(`./${service}${resource}.js`);
-        return new Cls(service, resource);
-    }
-
-    static type(req) {
-        return  req.ResourceType.split('::')[1];
+    static create(req) {
+        const type = req.ResourceType.split('::')[1];
+        const Cls = require(`./${type.replace(/-/g, '/')}.js`);
+        return new Cls();
     }
 
     static request(req, context, callback) {
@@ -38,7 +31,7 @@ module.exports = class CustomResource {
 
         try {
             console.log(JSON.stringify(req));
-            const resource = CustomResource.create(CustomResource.type(req));
+            const resource = CustomResource.create(req);
             resource[req.RequestType](req).then(success, failed);
         } catch(err) {
             failed(err);

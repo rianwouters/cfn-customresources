@@ -1,8 +1,12 @@
 'use strict';
-const CustomAWSResource = require('./CustomAWSResource.js');
+const CustomAWSResource = require('../../CustomAWSResource.js');
 const AWS = require('aws-sdk');
 
-module.exports = class APIGatewayApiKey extends CustomAWSResource {
+module.exports = class ApiKey extends CustomAWSResource {
+
+    constructor() {
+        super('APIGateway');
+    }
 
     createParams(req) {
         const params = super.createParams(req);
