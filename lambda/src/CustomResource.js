@@ -9,10 +9,6 @@ module.exports = class CustomResource {
         return `${req.StackId.split('/')[1].slice(-13)}-${req.LogicalResourceId.slice(-13)}-${req.RequestId.slice(-12)}`;
     }
 
-    request(req, context) {
-        return this[req.RequestType](req);
-    }
-
     static create(type) {
         const [brand, service, resource] = type.split('-');
         // TODO: move into brand/service/resource.js dir
@@ -43,7 +39,7 @@ module.exports = class CustomResource {
         try {
             console.log(JSON.stringify(req));
             const resource = CustomResource.create(CustomResource.type(req));
-            resource.request(req, context).then(success, failed);
+            resource[req.RequestType](req).then(success, failed);
         } catch(err) {
             failed(err);
         }
