@@ -7,7 +7,7 @@ module.exports = class CustomResource {
     }
 
     Name(req) {
-        return `${req.StackId.split('/')[1]}-${req.LogicalResourceId}-${req.RequestId.slice(-12)}`;
+        return `${req.StackId.split('/')[1].slice(-13)}-${req.LogicalResourceId.slice(-13)}-${req.RequestId.slice(-12)}`;
     }
 
     request(req, context) {
