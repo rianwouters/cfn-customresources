@@ -12,7 +12,8 @@
     "url": "https://github.com/rianwouters/cfn-customresources/issues"
   },
   "homepage": "https://github.com/rianwouters/cfn-customresources#readme",
-  "dependencies": {
-    "cfn-response": "^1.0.1"
+  "dependencies": {},
+  "scripts": {
+    "install": "cd lambda && npm install"
   }
 }
