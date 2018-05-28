@@ -24,6 +24,7 @@ Resources:
       Code: lambda
       Role: !GetAtt Role.Arn
       Runtime: nodejs6.10
+      Timeout : 5
 Outputs:
   ServiceToken:
     Value: !GetAtt Handler.Arn
