@@ -1,5 +1,5 @@
 'use strict';
-const CustomUpdatableAWSResource = require('../../CustomUpdatableAWSResource.js');
+const CustomUpdatableAWSResource = require('../CustomUpdatableAWSResource.js');
 
 module.exports = class Pipeline extends CustomUpdatableAWSResource {
 

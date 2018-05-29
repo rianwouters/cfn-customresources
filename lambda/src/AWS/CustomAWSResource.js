@@ -1,8 +1,9 @@
 'use strict';
-const CustomResource = require('./CustomResource.js');
+const CustomResource = require('../CustomResource.js');
 const AWS = require('aws-sdk');
 
 module.exports = class CustomAWSResource extends CustomResource {
+
     constructor(serviceName) {
         super();
         this.service = new AWS[serviceName]();

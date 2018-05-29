@@ -1,5 +1,5 @@
 'use strict';
-const CustomAWSResource = require('../../CustomAWSResource.js');
+const CustomAWSResource = require('../CustomAWSResource.js');
 
 module.exports = class ApiKey extends CustomAWSResource {
 
