@@ -15,8 +15,8 @@ module.exports = class CustomAWSResource extends CustomResource {
         return this.constructor.name;
     }
 
-    serviceMethod(name, type = this.type) {
-        const methodName = `${name}${type}`;
+    serviceMethod(name) {
+        const methodName = `${name}${this.type}`;
         console.log('serviceMethod:', methodName);
         if (this.service[methodName]) {
             const paramMethodName = `${name}Params`;

@@ -7,6 +7,22 @@ module.exports = class ApiKey extends CustomAWSResource {
         super('APIGateway');
     }
 
+    detachExisting({ResourceProperties: {stageKeys: {restApiId, stageName}}}) {
+        const patchOperations = [{
+            op: 'remove',
+            value: `${restApiId}/${stageName}`,
+            from: '/stageKeys'
+        }]
+        console.log(`patchOperations ${JSON.stringify(patchOperations)}`);
+        return this.service.getApiKeys().promise().then(({items}) => Promise.all(
+            items.map(({id}) => this.service.updateApiKey({apiKey: id, patchOperations}).promise())
+        ))
+    }
+
+    Create(req) {
+        this.detachExisting(req).then(super.Create(req));
+    }
+
     createParams(req) {
         const params = super.createParams(req);
         if (!params.name) params.name = this.Name(req);
