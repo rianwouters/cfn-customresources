@@ -8,11 +8,11 @@ module.exports = class ApiKey extends CustomAWSResource {
     }
 
     detachExisting({ResourceProperties: stageKeys}) {
-        const patchOperations = stageKeys.map(({restApiId, stageName}) => {
+        const patchOperations = stageKeys.map(({restApiId, stageName}) => ({
             op: 'remove',
             value: `${restApiId}/${stageName}`,
             from: '/stageKeys'
-        });
+        }));
         console.log(`patchOperations ${JSON.stringify(patchOperations)}`);
         return this.service.getApiKeys().promise().then(({items}) => Promise.all(
             items.map(({id}) => this.service.updateApiKey({apiKey: id, patchOperations}).promise())
