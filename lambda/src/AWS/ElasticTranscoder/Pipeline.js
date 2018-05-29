@@ -1,6 +1,5 @@
 'use strict';
 const CustomUpdatableAWSResource = require('../../CustomUpdatableAWSResource.js');
-const AWS = require('aws-sdk');
 
 module.exports = class Pipeline extends CustomUpdatableAWSResource {
 

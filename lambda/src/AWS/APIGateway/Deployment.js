@@ -1,6 +1,5 @@
 'use strict';
 const CustomAWSResource = require('../../CustomAWSResource.js');
-const AWS = require('aws-sdk');
 
 module.exports = class Deployment extends CustomAWSResource {
 

@@ -1,7 +1,5 @@
 'use strict';
 const CustomUpdatableAWSResource = require('../../CustomUpdatableAWSResource.js');
-const AWS = require('aws-sdk');
-const et = new AWS.ElasticTranscoder();
 
 module.exports = class Preset extends CustomUpdatableAWSResource {
 
