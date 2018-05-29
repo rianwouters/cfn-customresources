@@ -7,20 +7,19 @@ module.exports = class ApiKey extends CustomAWSResource {
         super('APIGateway');
     }
 
-    detachExisting({ResourceProperties: {stageKeys}}) {
-        const patchOperations = stageKeys.map(({restApiId, stageName}) => ({
-            op: 'remove',
-            value: `${restApiId}/${stageName}`,
-            path: '/stages'
-        }));
-        console.log(`patchOperations ${JSON.stringify(patchOperations)}`);
-        return this.service.getApiKeys().promise().then(({items}) => Promise.all(
-            items.map(({id}) => this.service.updateApiKey({apiKey: id, patchOperations}).promise())
-        ))
+    findExisting({ResourceProperties: {stageKeys, value}}) {
+        stageKeys = stageKeys.map(k => `${k.restApiId}/${k.stageName}`);
+        return this.service.getApiKeys({includeValues: true}).promise()
+            .then(({items}) => items.find(i => i.value === value && JSON.stringify(i.stageKeys) === JSON.stringify(stageKeys)))
     }
 
     Create(req) {
-        return this.detachExisting(req).then(() => super.Create(req));
+        return this.findExisting(req).then(data =>
+            if (data) {
+                const res = this.response(data);
+                req.PhysicalResourceId = res.Id;
+                return res;
+            } else  return super.Create(req));
     }
 
     createParams(req) {
