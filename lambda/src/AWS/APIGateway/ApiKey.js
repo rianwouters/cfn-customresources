@@ -20,7 +20,7 @@ module.exports = class ApiKey extends CustomAWSResource {
     }
 
     Create(req) {
-        this.detachExisting(req).then(super.Create(req));
+        this.detachExisting(req).then(() => super.Create(req));
     }
 
     createParams(req) {
