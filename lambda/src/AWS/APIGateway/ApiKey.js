@@ -7,7 +7,7 @@ module.exports = class ApiKey extends CustomAWSResource {
         super('APIGateway');
     }
 
-    detachExisting({ResourceProperties: stageKeys}) {
+    detachExisting({ResourceProperties: {stageKeys}}) {
         const patchOperations = stageKeys.map(({restApiId, stageName}) => ({
             op: 'remove',
             value: `${restApiId}/${stageName}`,
