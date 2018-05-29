@@ -6,6 +6,8 @@ module.exports = class CustomAWSResource extends CustomResource {
 
     constructor(serviceName) {
         super();
+        console.log("Creating", serviceName);
+        console.log("type:", this.type);
         this.service = new AWS[serviceName]();
     }
 
@@ -15,6 +17,7 @@ module.exports = class CustomAWSResource extends CustomResource {
 
     serviceMethod(name, type = this.type) {
         const methodName = `${name}${type}`;
+        console.log('serviceMethod:', methodName);
         if (this.service[methodName]) {
             const paramMethodName = `${name}Params`;
             return req => {
