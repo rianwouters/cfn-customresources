@@ -14,12 +14,13 @@ module.exports = class ApiKey extends CustomAWSResource {
     }
 
     Create(req) {
-        return this.findExisting(req).then(data =>
+        return this.findExisting(req).then(data => {
             if (data) {
                 const res = this.response(data);
                 req.PhysicalResourceId = res.Id;
                 return res;
-            } else  return super.Create(req));
+            } else return super.Create(req)
+        });
     }
 
     createParams(req) {
