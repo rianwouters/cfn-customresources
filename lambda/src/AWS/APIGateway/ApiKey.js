@@ -9,8 +9,12 @@ module.exports = class ApiKey extends CustomAWSResource {
 
     findExisting({ResourceProperties: {stageKeys, value}}) {
         stageKeys = stageKeys.map(k => `${k.restApiId}/${k.stageName}`);
+        console.log(`findExisting: Looking for ${value} ${JSON.stringify(stageKeys)}`);
         return this.service.getApiKeys({includeValues: true}).promise()
-            .then(({items}) => items.find(i => i.value === value && JSON.stringify(i.stageKeys) === JSON.stringify(stageKeys)))
+            .then(({items}) => items.find(i => {
+                console.log(`checking ${i.value} ${JSON.stringify(i.stageKeys)}`);
+                return  i.value === value && JSON.stringify(i.stageKeys) === JSON.stringify(stageKeys);
+            }))
     }
 
     Create(req) {
@@ -19,7 +23,8 @@ module.exports = class ApiKey extends CustomAWSResource {
                 const res = this.response(data);
                 req.PhysicalResourceId = res.Id;
                 return res;
-            } else return super.Create(req)
+            } else
+                return super.Create(req);
         });
     }
 
