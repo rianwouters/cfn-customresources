@@ -10,7 +10,7 @@ module.exports = class ApiKey extends CustomAWSResource {
     deleteExisting({ResourceProperties: {value}}) {
         return this.service.getApiKeys({includeValues: true}).promise()
             .then(({items}) => items.find(i => i.value === value))
-            .then(key => !key || this.Delete({PhysicalResourceId: key.id}))
+            .then(key => !key || this.Delete({PhysicalResourceId: key.id}));
     }
 
     Create(req) {
