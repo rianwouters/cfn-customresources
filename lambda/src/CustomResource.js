@@ -3,8 +3,8 @@ const response = require('cfn-response');
 
 module.exports = class CustomResource {
 
-    Name(req) {
-        return `${req.StackId.split('/')[1].slice(-13)}-${req.LogicalResourceId.slice(-13)}-${req.RequestId.slice(-12)}`;
+    Name({StackId, LogicalResourceId, RequestId}) {
+        return `${StackId.split('/')[1].slice(-13)}-${LogicalResourceId.substr(0,13)}-${RequestId.slice(-12)}`;
     }
 
     static create(req) {
