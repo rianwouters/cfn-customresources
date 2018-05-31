@@ -66,7 +66,7 @@ module.exports = class CustomAWSResource extends CustomResource {
 
         // succeed fast if resource does not exist
         return (read ? read(req).then(() => del(req)) : del(req)).catch(
-            err => err.constructor.name === "NotFoundException" || Promise.reject(err)
+            err => [err.constructor.name, err.code].includes("NotFoundException") || Promise.reject(err)
         );
     }
 
