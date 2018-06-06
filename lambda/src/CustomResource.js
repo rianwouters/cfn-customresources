@@ -25,8 +25,7 @@ module.exports = class CustomResource {
         };
 
         const respond = (status, data) => {
-            response.send(req, status, data, req.PhysicalResourceId);
-            callback(null);
+            response.send(req, status, data, req.PhysicalResourceId, callback);
         };
 
         try {
