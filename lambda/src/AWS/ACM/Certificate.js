@@ -13,6 +13,15 @@ module.exports = class Certificate extends CustomAWSResource {
         super('ACM');
     }
 
+    //TODO refactor
+    requestParams(req) {
+        return super.createParams(req);
+    }
+
+    describeParams(params) {
+        return params;
+    }
+
     serviceCreate(req) {
         const request = this.serviceMethod('request');
         const describe = this.serviceMethod('describe');
