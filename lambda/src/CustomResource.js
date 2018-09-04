@@ -10,7 +10,7 @@ module.exports = class CustomResource {
     static create(req) {
         const type = req.ResourceType.split('::')[1];
         const Cls = require(`./${type.replace(/-/g, '/')}.js`);
-        return new Cls();
+        return new Cls(req);
     }
 
     static request(req, context, callback) {

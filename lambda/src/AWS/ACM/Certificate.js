@@ -1,9 +1,15 @@
 'use strict';
-const CustomUpdatableAWSResource = require('../CustomUpdatableAWSResource.js');
+const AWS = require('aws-sdk');
+const CustomAWSResource = require('../CustomAWSResource.js');
 
-module.exports = class Certificate extends CustomUpdatableAWSResource {
+module.exports = class Certificate extends CustomAWSResource {
 
-    constructor() {
+    constructor(req) {
+        // TODO: make this a generic property
+        if (req.ResourceProperties.Region) {
+            AWS.config.region = req.ResourceProperties.Region;
+            delete req.ResourceProperties.Region;
+        }
         super('ACM');
     }
 
