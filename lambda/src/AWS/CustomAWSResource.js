@@ -41,9 +41,14 @@ module.exports = class CustomAWSResource extends CustomResource {
         return {Id: req.PhysicalResourceId};
     }
 
+
+    serviceCreate(req) {
+        const createMethod = this.serviceMethod('create');
+        return createMethod(req);
+    }
+
     Create(req) {
-        const create = this.serviceMethod('create');
-        return create(req).then(data => {
+        return this.serviceCreate(req).then(data => {
             const res = this.response(data);
             req.PhysicalResourceId = res.Id;
             return res;
