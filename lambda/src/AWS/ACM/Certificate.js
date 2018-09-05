@@ -31,13 +31,7 @@ module.exports = class Certificate extends CustomAWSResource {
         const describe = this.serviceMethod('describe');
 
         const until = (c, f) => function g(p) {
-            return f(p).then(d => {
-                console.log(JSON.stringify(d));
-                console.log(d.Certificate.DomainValidationOptions[0].ValidationMethod);
-                console.log(d.Certificate.DomainValidationOptions[0].ResourceRecord);
-                console.log(c(d) ? "foo" : "bar");
-                return c(d) ? d : g(p);
-            });
+            return f(p).then(d => c(d) ? d : g(p));
         };
         const hasResourceRecord = d => d.Certificate.DomainValidationOptions.find(o => o.ValidationMethod !== "DNS" || o.ResourceRecord);
 
