@@ -39,7 +39,7 @@ module.exports = class Certificate extends CustomAWSResource {
                 return c(d) ? d : g(p);
             });
         };
-        const hasResourceRecord = d => (o => o.ValidationMethod !== "DNS" || o.ResourceRecord)(d.Certificate.DomainValidationOptions[0]);
+        const hasResourceRecord = d => d.Certificate.DomainValidationOptions.find(o => o.ValidationMethod !== "DNS" || o.ResourceRecord);
 
         return request(req).then(until(hasResourceRecord, describe));
     }
