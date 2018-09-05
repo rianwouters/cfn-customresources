@@ -46,9 +46,9 @@ module.exports = class Certificate extends CustomAWSResource {
         const cert = data.Certificate;
         return Object.assign(cert,{
             Id: cert.CertificateArn,
-            ValidationDNSRecordName: cert.DomainValidationOptions[0].ResourceRecord.Name,
-            ValidationDNSRecordValue: cert.DomainValidationOptions[0].ResourceRecord.Value,
-            ValidationDNSRecordType: cert.DomainValidationOptions[0].ResourceRecord.Type
+            ValidationRecordName: cert.DomainValidationOptions[0].ResourceRecord.Name,
+            ValidationRecordValue: cert.DomainValidationOptions[0].ResourceRecord.Value,
+            ValidationRecordType: cert.DomainValidationOptions[0].ResourceRecord.Type
         });
     }
 };
