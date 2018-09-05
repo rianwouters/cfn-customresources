@@ -1,6 +1,6 @@
 'use strict';
 const AWS = require('aws-sdk');
-const CustomAWSResource = require('../CustomAWSResource.js');
+const CustomAWSResource = require('.    ./CustomAWSResource.js');
 
 module.exports = class Certificate extends CustomAWSResource {
 
@@ -22,10 +22,21 @@ module.exports = class Certificate extends CustomAWSResource {
         return params;
     }
 
+    describe(p) {
+        const describe = this.serviceMethod('describe');
+    }
+
     serviceCreate(req) {
         const request = this.serviceMethod('request');
         const describe = this.serviceMethod('describe');
-        return request(req).then(describe);
+
+        const until = (c, f) => {
+            const g = p => f(p).then(d => c(d) ? d : g(p));
+            return g;
+        }
+        const hasResourceRecord = d => (o => o.ValidationMethod !== "DNS" || o.ResourceRecord)(d.Certificate.DomainValidationOptions);
+
+        return request(req).then(until(hasResourceRecord, describe));
     }
 
     deleteParams(req) {
