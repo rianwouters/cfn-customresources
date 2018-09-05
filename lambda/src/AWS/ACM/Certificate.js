@@ -33,6 +33,10 @@ module.exports = class Certificate extends CustomAWSResource {
         const until = (c, f) => function g(p) {
             return f(p).then(d => {
                 console.log(JSON.stringify(d));
+                console.log(d.Certificate.DomainValidationOptions.ValidationMethod);
+                console.log(d.Certificate.DomainValidationOptions.ResourceRecord);
+                console.log(c(d));
+                console.log(c(d) ? "foo" : "bar");
                 return c(d) ? d : g(p);
             });
         };
