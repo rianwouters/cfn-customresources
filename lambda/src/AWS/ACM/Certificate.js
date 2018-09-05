@@ -1,6 +1,6 @@
 'use strict';
 const AWS = require('aws-sdk');
-const CustomAWSResource = require('.    ./CustomAWSResource.js');
+const CustomAWSResource = require('../CustomAWSResource.js');
 
 module.exports = class Certificate extends CustomAWSResource {
 
