@@ -7,20 +7,19 @@ module.exports = class Deployment extends CustomAWSResource {
         super(req, 'APIGateway');
     }
 
-    deleteParams() {
-        return {
+    delete() {
+        return this.resourceMethod('delete')({
             deploymentId: this.physicalId,
             restApiId: this.props.restApiId
-        };
+        });
     }
 
     Create() {
         if (this.props.stageName) return Promise.reject(new Error("stageName not allowed"));
         if (this.props.stageDescription) return Promise.reject(new Error("stageDescription not allowed"));
-        return super.Create();
-    }
-
-    response(data) {
-        return {Id: data.id};
+        return this.create().then(data => {
+            this.physicalId = data.id;
+            return {Id: data.id};
+        })
     }
 };

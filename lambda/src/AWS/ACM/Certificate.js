@@ -6,38 +6,37 @@ module.exports = class Certificate extends CustomAWSResource {
     constructor(req) {
         super(req, 'ACM');
     }
-
-    requestParams() {
-        return this.createParams();
+    
+    create() {
+        return this.resourceMethod('request')(this.props);
     }
 
-    describeParams() {
-        return {CertificateArn: this.physicalId};
+    delete() {
+        return this.resourceMethod('delete')({CertificateArn: this.physicalId});
     }
 
-    serviceCreate() {
-        const request = this.serviceMethod('request');
-        const describe = this.serviceMethod('describe');
+    describe() {
+        return this.resourceMethod('describe')({CertificateArn: this.physicalId});
+    }
 
-        const until = (c, f) => function g(p) {
-            return f(p).then(d => c(d) ? d : g(p));
+    Create() {
+        const until = (c, f) => function g() {
+            return f().then(d => c(d) ? d : g());
         };
         const hasResourceRecord = d => d.Certificate.DomainValidationOptions.find(o => o.ValidationMethod !== "DNS" || o.ResourceRecord);
-
-        return request().then(until(hasResourceRecord, describe));
+        return this.create()
+            .then(data => this.physicalId = data.CertificateArn)
+            .then(until(hasResourceRecord, () => this.describe))
+            .then(data => {
+                const cert = data.Certificate;
+                const resourceRecord = cert.DomainValidationOptions[0].ResourceRecord;
+                return Object.assign(cert, {
+                    Id: this.physicalId,
+                    ValidationRecordName: resourceRecord.Name,
+                    ValidationRecordValue: resourceRecord.Value,
+                    ValidationRecordType: resourceRecord.Type
+                });
+            });
     }
 
-    deleteParams() {
-        return {CertificateArn: this.physicalId};
-    }
-
-    response(data) {
-        const cert = data.Certificate;
-        return Object.assign(cert,{
-            Id: cert.CertificateArn,
-            ValidationRecordName: cert.DomainValidationOptions[0].ResourceRecord.Name,
-            ValidationRecordValue: cert.DomainValidationOptions[0].ResourceRecord.Value,
-            ValidationRecordType: cert.DomainValidationOptions[0].ResourceRecord.Type
-        });
-    }
 };

@@ -3,13 +3,12 @@ const CustomAWSResource = require('./CustomAWSResource.js');
 
 module.exports = class CustomUpdatableAWSResource extends CustomAWSResource {
 
-    updateParams() {
-        return Object.assign(this.createParams(), {Id: this.physicalId});
+    update() {
+        return this.resourceMethod('update')(Object.assign(this.props, {Id: this.physicalId}));
     }
 
     Update() {
-        const update = this.serviceMethod('update');
-        return update().then(data => this.response(data));
+        return this.update().then(data => this.response(data));
     }
 
 };
