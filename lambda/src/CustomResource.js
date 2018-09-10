@@ -1,10 +1,19 @@
 'use strict';
 const response = require('cfn-response');
+const _ = require('underscore');
 
 module.exports = class CustomResource {
 
-    Name({StackId, LogicalResourceId, RequestId}) {
-        return `${StackId.split('/')[1].slice(-13)}-${LogicalResourceId.substr(0,13)}-${RequestId.slice(-12)}`;
+    constructor(req) {
+        this.stackId = req.StackId;
+        this.logicalId = req.LogicalResourceId;
+        this.reqId = req.requestId;
+        this.props = _.omit(req.ResourceProperties, 'ServiceToken');
+        this.physicalId = req.PhysicalResourceId;
+    }
+
+    Name() {
+        return `${this.stackId.split('/')[1].slice(-13)}-${this.logicalId.substr(0,13)}-${this.reqId.slice(-12)}`;
     }
 
     static create(req) {
@@ -14,24 +23,25 @@ module.exports = class CustomResource {
     }
 
     static request(req, context, callback) {
-        const failed = err => {
-            console.error(err);
-            respond(response.FAILED, {});
-        };
-
-        const success = data => {
-            console.log(JSON.stringify(data));
-            respond(response.SUCCESS, data);
-        };
-
-        const respond = (status, data) => {
-            response.send(req, status, data, req.PhysicalResourceId, callback);
-        };
-
         try {
             console.log(JSON.stringify(req));
             const resource = CustomResource.create(req);
-            resource[req.RequestType](req).then(success, failed);
+
+            const respond = (status, data) => {
+                response.send(req, status, data, resource.physicalId, callback);
+            };
+
+            const failed = err => {
+                console.error(err);
+                respond(response.FAILED, {});
+            };
+
+            const success = data => {
+                console.log(JSON.stringify(data));
+                respond(response.SUCCESS, data);
+            };
+
+            resource[req.RequestType]().then(success, failed);
         } catch(err) {
             failed(err);
         }

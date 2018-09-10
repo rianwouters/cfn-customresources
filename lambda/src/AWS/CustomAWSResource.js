@@ -5,17 +5,12 @@ const AWS = require('aws-sdk');
 module.exports = class CustomAWSResource extends CustomResource {
 
     constructor(req, serviceName) {
-        super();
+        super(req);
         console.log("Creating", serviceName);
         console.log("type:", this.type);
-
-        const params = {};
-        if (req.ResourceProperties.Region) {
-            params.region = req.ResourceProperties.Region;
-            delete req.ResourceProperties.Region;
-        }
-
-        this.service = new AWS[serviceName](params);
+        const region = this.props.Region || AWS.config.region;
+        delete this.props.Region;
+        this.service = new AWS[serviceName]({region: region});
     }
 
     get type() {
@@ -27,57 +22,54 @@ module.exports = class CustomAWSResource extends CustomResource {
         console.log('serviceMethod:', methodName);
         if (this.service[methodName]) {
             const paramMethodName = `${name}Params`;
-            return req => {
-                const params = this[paramMethodName](req);
+            return () => {
+                const params = this[paramMethodName]();
                 return this.service[methodName](params).promise();
             }
         }
     }
 
-    createParams(req) {
-        const params = req.ResourceProperties;
-        delete params.ServiceToken;
-        return params;
+    createParams() {
+        return this.props;
     }
 
-    readParams(req) {
-        return this.deleteParams(req);
+    readParams() {
+        return this.deleteParams();
     }
 
-    deleteParams(req) {
-        return {Id: req.PhysicalResourceId};
+    deleteParams() {
+        return {Id: this.physicalId};
     }
 
 
-    serviceCreate(req) {
+    serviceCreate() {
         const createMethod = this.serviceMethod('create');
-        return createMethod(req);
+        return createMethod();
     }
 
-    Create(req) {
-        return this.serviceCreate(req).then(data => {
+    Create() {
+        return this.serviceCreate().then(data => {
             const res = this.response(data);
-            req.PhysicalResourceId = res.Id;
+            this.physicalId = res.Id;
             return res;
         })
     }
 
-    Update(req) {
-        const id = req.PhysicalResourceId;
-        return this.Delete(req)
+    Update() {
+        return this.Delete()
             .then(
-                () => (delete req.PhysicalResourceId, this.Create(req)),
-                () => (delete req.PhysicalResourceId, this.Create(req))
+                () => this.Create(),
+                () => this.Create()
             )
-            .catch(err => (req.PhysicalResourceId = id, Promise.reject(err)));
+            .catch(err => Promise.reject(err));
     }
 
-    Delete(req) {
+    Delete() {
         const del = this.serviceMethod('delete');
         const read = this.serviceMethod('read');
 
         // succeed fast if resource does not exist
-        return (read ? read(req).then(() => del(req)) : del(req)).catch(
+        return (read ? read().then(() => del()) : del()).catch(
             err => [err.constructor.name, err.code].includes("NotFoundException") || Promise.reject(err)
         );
     }

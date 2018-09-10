@@ -1,5 +1,4 @@
 'use strict';
-const AWS = require('aws-sdk');
 const CustomAWSResource = require('../CustomAWSResource.js');
 
 module.exports = class Certificate extends CustomAWSResource {
@@ -8,20 +7,15 @@ module.exports = class Certificate extends CustomAWSResource {
         super(req, 'ACM');
     }
 
-    //TODO refactor
-    requestParams(req) {
-        return super.createParams(req);
+    requestParams() {
+        return this.createParams();
     }
 
-    describeParams(params) {
-        return params;
+    describeParams() {
+        return {CertificateArn: this.physicalId};
     }
 
-    describe(p) {
-        const describe = this.serviceMethod('describe');
-    }
-
-    serviceCreate(req) {
+    serviceCreate() {
         const request = this.serviceMethod('request');
         const describe = this.serviceMethod('describe');
 
@@ -30,11 +24,11 @@ module.exports = class Certificate extends CustomAWSResource {
         };
         const hasResourceRecord = d => d.Certificate.DomainValidationOptions.find(o => o.ValidationMethod !== "DNS" || o.ResourceRecord);
 
-        return request(req).then(until(hasResourceRecord, describe));
+        return request().then(until(hasResourceRecord, describe));
     }
 
-    deleteParams(req) {
-        return {CertificateArn: req.PhysicalResourceId};
+    deleteParams() {
+        return {CertificateArn: this.physicalId};
     }
 
     response(data) {

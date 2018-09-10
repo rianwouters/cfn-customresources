@@ -7,9 +7,9 @@ module.exports = class Pipeline extends CustomUpdatableAWSResource {
         super(req, 'ElasticTranscoder');
     }
 
-    createParams(req) {
-        const params = super.createParams(req);
-        if (!params.Name) params.Name = this.Name(req);
+    createParams() {
+        const params = super.createParams();
+        if (!params.Name) params.Name = this.Name();
         return params;
     }
 
