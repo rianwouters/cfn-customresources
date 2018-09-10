@@ -3,8 +3,8 @@ const CustomAWSResource = require('../CustomAWSResource.js');
 
 module.exports = class ApiKey extends CustomAWSResource {
 
-    constructor() {
-        super('APIGateway');
+    constructor(req) {
+        super(req, 'APIGateway');
     }
 
     deleteExisting({ResourceProperties: {value}}) {

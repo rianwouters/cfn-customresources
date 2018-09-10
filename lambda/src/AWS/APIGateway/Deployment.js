@@ -3,8 +3,8 @@ const CustomAWSResource = require('../CustomAWSResource.js');
 
 module.exports = class Deployment extends CustomAWSResource {
 
-    constructor() {
-        super('APIGateway');
+    constructor(req) {
+        super(req, 'APIGateway');
     }
 
     deleteParams(req) {

@@ -3,8 +3,8 @@ const CustomUpdatableAWSResource = require('../CustomUpdatableAWSResource.js');
 
 module.exports = class Pipeline extends CustomUpdatableAWSResource {
 
-    constructor() {
-        super('ElasticTranscoder');
+    constructor(req) {
+        super(req, 'ElasticTranscoder');
     }
 
     createParams(req) {
