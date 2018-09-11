@@ -3,10 +3,6 @@ const CustomAWSResource = require('../CustomAWSResource.js');
 
 module.exports = class Deployment extends CustomAWSResource {
 
-    constructor(req) {
-        super(req, 'APIGateway');
-    }
-
     delete() {
         return this.resourceMethod('delete')({
             deploymentId: this.physicalId,

@@ -4,7 +4,7 @@ const CustomAWSResource = require('../CustomAWSResource.js');
 module.exports = class Certificate extends CustomAWSResource {
 
     constructor(req) {
-        super(req, 'ACM');
+        super(req);
         this.service.createCertificate = this.service.requestCertificate;
     }
 

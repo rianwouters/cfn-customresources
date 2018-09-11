@@ -4,13 +4,13 @@ const AWS = require('aws-sdk');
 
 module.exports = class CustomAWSResource extends CustomResource {
 
-    constructor(req, serviceName) {
+    constructor(req) {
         super(req);
-        console.log("Creating", serviceName);
-        console.log("type:", this.type);
         const region = this.props.Region || AWS.config.region;
         delete this.props.Region;
+        const serviceName = req.ResourceType.split('::')[1].split('-').slice(-2)[0];
         this.service = new AWS[serviceName]({region: region});
+        console.log("Creating", serviceName, this.type);
     }
 
     create() {

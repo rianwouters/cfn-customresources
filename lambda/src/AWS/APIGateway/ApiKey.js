@@ -4,7 +4,7 @@ const CustomAWSResource = require('../CustomAWSResource.js');
 module.exports = class ApiKey extends CustomAWSResource {
 
     constructor(req) {
-        super(req, 'APIGateway');
+        super(req);
         if (!this.props.name) this.props.name = this.Name();
         if (this.props.enabled) this.props.enabled = (this.props.enabled === 'true');
     }
