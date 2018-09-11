@@ -15,7 +15,7 @@ module.exports = class CustomAWSResource extends CustomResource {
 
     create() {
         this.resourceMethod('create')(this.props).then(data => {
-            this.physicalId = getPhysicalId(data);
+            this.physicalId = this.getPhysicalId(data);
             return data;
         });
     }
