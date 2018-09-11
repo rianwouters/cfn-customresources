@@ -31,7 +31,7 @@ module.exports = class CustomAWSResource extends CustomResource {
 
     serviceMethod(name) {
         console.log('serviceMethod:', name);
-        return (...args) => this.service[name](args).promise();
+        return (...args) => this.service[name](...args).promise();
     }
 
     resourceMethod(name) {
