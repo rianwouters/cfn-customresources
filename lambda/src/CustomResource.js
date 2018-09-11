@@ -23,22 +23,22 @@ module.exports = class CustomResource {
     }
 
     static request(req, context, callback) {
+        const respond = (status, data) => {
+            response.send(req, status, data, data.Id, callback);
+        };
+
+        const failed = err => {
+            console.error(err);
+            respond(response.FAILED, {Id: req.physicalId});
+        };
+
         try {
             console.log(JSON.stringify(req));
             const resource = CustomResource.create(req);
 
-            const respond = (status, data) => {
-                response.send(req, status, Object.assign(data, {Id: resource.physicalId}), resource.physicalId, callback);
-            };
-
-            const failed = err => {
-                console.error(err);
-                respond(response.FAILED, {});
-            };
-
             const success = data => {
                 console.log(JSON.stringify(data));
-                respond(response.SUCCESS, data);
+                respond(response.SUCCESS, Object.assign(data, {Id: resource.physicalId}));
             };
 
             resource[req.RequestType]().then(success, failed);
