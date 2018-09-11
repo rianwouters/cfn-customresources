@@ -28,7 +28,7 @@ module.exports = class CustomResource {
             const resource = CustomResource.create(req);
 
             const respond = (status, data) => {
-                response.send(req, status, data, resource.physicalId, callback);
+                response.send(req, status, Object.assign(data, {Id: resource.physicalId}), resource.physicalId, callback);
             };
 
             const failed = err => {

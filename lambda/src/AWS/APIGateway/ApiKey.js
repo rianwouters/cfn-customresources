@@ -24,11 +24,11 @@ module.exports = class ApiKey extends CustomAWSResource {
     }
 
     Create() {
-        return this.deleteExistingValue()
-            .then(() => this.create())
-            .then(data => {
-                this.physicalId = data.id;
-                return {Id: data.id};
-            });
+        return this.deleteExistingValue().then(() => super.Create());
     }
+
+    getPhysicalId(data) {
+        return data.id;
+    }
+
 };

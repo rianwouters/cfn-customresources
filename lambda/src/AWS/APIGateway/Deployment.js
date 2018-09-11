@@ -17,9 +17,11 @@ module.exports = class Deployment extends CustomAWSResource {
     Create() {
         if (this.props.stageName) return Promise.reject(new Error("stageName not allowed"));
         if (this.props.stageDescription) return Promise.reject(new Error("stageDescription not allowed"));
-        return this.create().then(data => {
-            this.physicalId = data.id;
-            return {Id: data.id};
-        })
+        return super.Create();
     }
+
+    getPhysicalId(data) {
+        return data.id;
+    }
+
 };

@@ -8,7 +8,7 @@ module.exports = class CustomUpdatableAWSResource extends CustomAWSResource {
     }
 
     Update() {
-        return this.update().then(data => this.response(data));
+        return this.update();
     }
 
 };

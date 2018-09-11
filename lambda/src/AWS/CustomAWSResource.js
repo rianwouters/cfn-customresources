@@ -14,11 +14,10 @@ module.exports = class CustomAWSResource extends CustomResource {
     }
 
     create() {
-        this.resourceMethod('create')(this.props);
-    }
-
-    read() {
-        this.resourceMethod('read')({Id: this.physicalId});
+        this.resourceMethod('create')(this.props).then(data => {
+            this.physicalId = getPhysicalId(data);
+            return data;
+        });
     }
 
     delete() {
@@ -31,7 +30,7 @@ module.exports = class CustomAWSResource extends CustomResource {
 
     serviceMethod(name) {
         console.log('serviceMethod:', name);
-        return (...args) => this.service[name](...args).promise();
+        return (...args) => (console.log(JSON.stringify(args)), this.service[name](...args).promise());
     }
 
     resourceMethod(name) {
@@ -39,10 +38,7 @@ module.exports = class CustomAWSResource extends CustomResource {
     }
 
     Create() {
-        return this.create().then(data => {
-            this.physicalId = data[this.type].Id;
-            return data[this.type];
-        })
+        return this.create();
     }
 
     Update() {
@@ -54,8 +50,7 @@ module.exports = class CustomAWSResource extends CustomResource {
     }
 
     Delete() {
-        // succeed fast if resource does not exist
-        return (this.resourceMethod('read') ? this.read().then(() => this.delete()) : this.delete())
+        return this.delete()
             .catch(err => [err.constructor.name, err.code].includes("NotFoundException") || Promise.reject(err));
     }
 };

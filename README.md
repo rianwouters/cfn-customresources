@@ -121,7 +121,7 @@ Depending on the custom resource request type, its ```Create/Delete/Update``` me
 
 ### CustomAWSResource
 A custom resource implementation that maps a resource type on the AWS[Service].[<create|delete|read>Resource] methods of the AWS Javascript SDK.
-* Its ```<create|delete|read>Params``` methods are called to create the SDK method parameters, whose default implementations map the resource properties to the most common SDK parameter patterns.
+* Its ```<create|delete|...>Params``` methods are called to create the SDK method parameters, whose default implementations map the resource properties to the most common SDK parameter patterns.
 * Its response method is called to map the data returned from the SDK method, to CloudFormation attributes. It needs to contains at least the Id property containing the resource Id. Note that this is not implemented consistently in the SDK.
 
 As an example, the APIGatewayDeployment class uses this base class with custom delete parameters.
