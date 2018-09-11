@@ -22,7 +22,7 @@ module.exports = class Certificate extends CustomAWSResource {
         };
         const hasResourceRecord = d => d.Certificate.DomainValidationOptions.find(o => o.ValidationMethod !== "DNS" || o.ResourceRecord);
         return super.Create()
-            .then(until(hasResourceRecord, () => this.describe))
+            .then(until(hasResourceRecord, () => this.describe()))
             .then(data => data[this.type])
             .then(data => {
                 const resourceRecord = data.DomainValidationOptions[0].ResourceRecord;
