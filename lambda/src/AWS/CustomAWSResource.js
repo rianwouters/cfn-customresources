@@ -14,14 +14,14 @@ module.exports = class CustomAWSResource extends CustomResource {
     }
 
     create() {
-        this.resourceMethod('create')(this.props).then(data => {
+        return this.resourceMethod('create')(this.props).then(data => {
             this.physicalId = this.getPhysicalId(data);
             return data;
         });
     }
 
     delete() {
-        this.resourceMethod('delete')({Id: this.physicalId});
+        return this.resourceMethod('delete')({Id: this.physicalId});
     }
 
     get type() {
