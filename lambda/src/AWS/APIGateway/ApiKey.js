@@ -20,11 +20,15 @@ module.exports = class ApiKey extends CustomAWSResource {
     deleteExistingValue() {
         return this.all()
             .then(({items}) => items.find(i => i.value === this.props.value))
-            .then(key => !key || this.Delete({PhysicalResourceId: key.id}));
+            .then(key => !key || this.resourceMethod('delete')({apiKey: key.id}));
     }
 
     Create() {
-        return this.deleteExistingValue().then(() => super.Create());
+        return this.deleteExistingValue()
+            .then(
+                () => super.Create(),
+                () => super.Create()
+            );
     }
 
     getPhysicalId(data) {
