@@ -40,7 +40,7 @@ Resources:
             "wait": {
               "Type": "Wait",
               "Seconds": 60,
-              "Next": "check"
+              "Next": "function"
             },
             "function": {
               "Type": "Task",
