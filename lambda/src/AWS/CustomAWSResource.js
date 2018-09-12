@@ -6,10 +6,10 @@ module.exports = class CustomAWSResource extends CustomResource {
 
     constructor(req) {
         super(req);
-        const region = this.props.Region || AWS.config.region;
+        this.region = this.props.Region || AWS.config.region;
         delete this.props.Region;
         const serviceName = req.ResourceType.split('::')[1].split('-').slice(-2)[0];
-        this.service = new AWS[serviceName]({region: region});
+        this.service = new AWS[serviceName]({region: this.region});
         console.log("Creating", serviceName, this.type);
     }
 
