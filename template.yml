@@ -18,6 +18,7 @@ Resources:
       - arn:aws:iam::aws:policy/AmazonElasticTranscoder_FullAccess
       - arn:aws:iam::aws:policy/AmazonAPIGatewayAdministrator
       - arn:aws:iam::aws:policy/AWSCertificateManagerFullAccess
+      - arn:aws:iam::aws:policy/AWSStepFunctionsFullAccess
   Handler:
     Type: AWS::Lambda::Function
     Properties:
@@ -26,6 +27,30 @@ Resources:
       Role: !GetAtt Role.Arn
       Runtime: nodejs6.10
       Timeout : 15
+      Environment:
+        Variables:
+          DelayedFunctionCall: !Ref DelayedFunctionCall
+  DelayedFunctionCall:
+    Type: AWS::StepFunctions::StateMachine
+    Properties:
+      DefinitionString: |-
+        {
+          "StartAt": "wait",
+          "States": {
+            "wait": {
+              "Type": "Wait",
+              "Seconds": 60,
+              "Next": "check"
+            },
+            "function": {
+              "Type": "Task",
+              "InputPath": "$.request",
+              "Resource": "$.functionArn",
+              "End": true
+            }
+          }
+        }
+      RoleArn: !GetAtt Role.Arn
 Outputs:
   ServiceToken:
     Value: !GetAtt Handler.Arn

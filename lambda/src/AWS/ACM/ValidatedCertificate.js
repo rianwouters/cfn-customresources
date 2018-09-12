@@ -1,5 +1,6 @@
 'use strict';
 const CustomAWSResource = require('../CustomAWSResource.js');
+const AWS = require('aws-sdk');
 
 module.exports = class ValidatedCertificate extends CustomAWSResource {
 
@@ -9,7 +10,18 @@ module.exports = class ValidatedCertificate extends CustomAWSResource {
 
     create() {
         this.physicalId = `V${this.props.CertificateArn}`;
-        return this.serviceMethod('waitFor')('certificateValidated', this.props);
+        return this.serviceMethod('describe')(this.props).then(data => {
+            if (data.Certificate.DomainValidationOptions.ValidationStatus === 'SUCCESS') return data.Certificate;
+            if (data.Certificate.DomainValidationOptions.ValidationStatus === 'FAILED') return Promise.reject();
+            return new AWS.StepFunctions().startExecution({
+                stateMachineArn: process.env.DelayedFunctionCall,
+                name: Math.random().toString().slice(2),
+                input: JSON.stringify({
+                    functionArn: this.context.invokedFunctionArn,
+                    request: this.req
+                })
+            }).promise().then(() => Promise.reject('DELAYED'))
+        });
     }
 
     delete() {

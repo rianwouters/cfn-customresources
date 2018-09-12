@@ -4,7 +4,9 @@ const _ = require('underscore');
 
 module.exports = class CustomResource {
 
-    constructor(req) {
+    constructor(req, context) {
+        this.req = req;
+        this.context = context;
         this.stackId = req.StackId;
         this.logicalId = req.LogicalResourceId;
         this.reqId = req.requestId;
@@ -16,10 +18,10 @@ module.exports = class CustomResource {
         return `${this.stackId.split('/')[1].slice(-13)}-${this.logicalId.substr(0,13)}-${this.reqId.slice(-12)}`;
     }
 
-    static create(req) {
+    static create(req, context) {
         const type = req.ResourceType.split('::')[1];
         const Cls = require(`./${type.replace(/-/g, '/')}.js`);
-        return new Cls(req);
+        return new Cls(req, context);
     }
 
     static request(req, context, callback) {
@@ -29,12 +31,12 @@ module.exports = class CustomResource {
 
         const failed = err => {
             console.error(err);
-            respond(response.FAILED, {Id: req.physicalId});
+            if (err !== "DELAYED") respond(response.FAILED, {Id: req.physicalId});
         };
 
         try {
             console.log(JSON.stringify(req));
-            const resource = CustomResource.create(req);
+            const resource = CustomResource.create(req, context);
 
             const success = data => {
                 console.log(JSON.stringify(data));
