@@ -17,6 +17,6 @@ module.exports = class ValidatedCertificate extends CustomAWSResource {
     }
 
     Create() {
-        super.Create().then(data => data[this.type]);
+        return super.Create().then(data => data[this.type]);
     }
 };
