@@ -15,7 +15,7 @@ Resources:
             - lambda.amazonaws.com
             - states.amazonaws.com
       ManagedPolicyArns:
-      - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+      - arn:aws:iam::aws:policy/AWSLambdaFullAccess
       - arn:aws:iam::aws:policy/AmazonElasticTranscoder_FullAccess
       - arn:aws:iam::aws:policy/AmazonAPIGatewayAdministrator
       - arn:aws:iam::aws:policy/AWSCertificateManagerFullAccess
