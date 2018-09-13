@@ -25,24 +25,30 @@ module.exports = class ValidatedCertificate extends CustomAWSResource {
         return "Certificate";
     }
 
+    retryLater() {
+        const sf = new AWS.StepFunctions();
+        const { stateMachineArn } = process.env;
+        return sf.updateStateMachine({
+            stateMachineArn,
+            definition: delayedInvocation(this.req.ResourceProperties.ServiceToken)
+        }).promise().then(() =>
+            sf.startExecution({
+                stateMachineArn,
+                name: Math.random().toString().slice(2),
+                input: JSON.stringify(this.req)
+            }).promise()
+        )
+    }
+
     create() {
         this.physicalId = `V${this.props.CertificateArn}`;
         return this.resourceMethod('describe')(this.props).then(data => {
-            if (data.Certificate.DomainValidationOptions.ValidationStatus === 'SUCCESS') return data.Certificate;
-            if (data.Certificate.DomainValidationOptions.ValidationStatus === 'FAILED') return Promise.reject();
-            const sf = new AWS.StepFunctions();
-            const { stateMachineArn } = process.env;
-            return sf.updateStateMachine({
-                stateMachineArn,
-                definition: delayedInvocation(this.req.ResourceProperties.ServiceToken)
-            }).promise()
-                .then(data =>
-                    sf.startExecution({
-                        stateMachineArn,
-                        name: Math.random().toString().slice(2),
-                        input: JSON.stringify(this.req)
-                    }).promise())
-                .then(() => Promise.reject('DELAYED'))
+            const { ValidationStatus } =  data.Certificate.DomainValidationOptions;
+            switch (ValidationStatus) {
+                case 'SUCCESS': return data.Certificate;
+                case 'FAILED': return Promise.reject("Certificate failed to validate");
+                default: return this.retryLater().then(() => Promise.reject('DELAYED');
+            }
         });
     }
 

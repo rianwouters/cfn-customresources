@@ -13,6 +13,7 @@ Resources:
           Principal:
             Service:
             - lambda.amazonaws.com
+            - states.amazonaws.com
       ManagedPolicyArns:
       - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
       - arn:aws:iam::aws:policy/AmazonElasticTranscoder_FullAccess
