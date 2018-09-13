@@ -27,7 +27,7 @@ module.exports = class ValidatedCertificate extends CustomAWSResource {
 
     create() {
         this.physicalId = `V${this.props.CertificateArn}`;
-        return this.serviceMethod('describe')(this.props).then(data => {
+        return this.resourceMethod('describe')(this.props).then(data => {
             if (data.Certificate.DomainValidationOptions.ValidationStatus === 'SUCCESS') return data.Certificate;
             if (data.Certificate.DomainValidationOptions.ValidationStatus === 'FAILED') return Promise.reject();
             const sf = new AWS.StepFunctions();
