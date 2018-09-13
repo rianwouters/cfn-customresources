@@ -29,24 +29,16 @@ Resources:
       Timeout : 15
       Environment:
         Variables:
-          DelayedFunctionCall: !Ref DelayedFunctionCall
-  DelayedFunctionCall:
+          stateMachineArn: !Ref StateMachine
+  StateMachine:
     Type: AWS::StepFunctions::StateMachine
     Properties:
       DefinitionString: |-
         {
-          "StartAt": "wait",
+          "StartAt": "dummy",
           "States": {
-            "wait": {
-              "Type": "Wait",
-              "Seconds": 60,
-              "Next": "function"
-            },
-            "function": {
-              "Type": "Task",
-              "InputPath": "$.request",
-              "Resource": "$.functionArn",
-              "End": true
+            "dummy": {
+              "Type": "Succeed"
             }
           }
         }

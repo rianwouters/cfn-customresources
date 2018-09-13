@@ -2,6 +2,23 @@
 const CustomAWSResource = require('../CustomAWSResource.js');
 const AWS = require('aws-sdk');
 
+const delayedInvocation = lambdaArn =>
+    JSON.stringify({
+        StartAt: "wait",
+        States: {
+            wait: {
+                Type: "Wait",
+                Seconds: 60,
+                Next: "function"
+            },
+            function: {
+                Type: "Task",
+                Resource: lambdaArn,
+                End: true
+            }
+        }
+    });
+
 module.exports = class ValidatedCertificate extends CustomAWSResource {
 
     get type() {
@@ -13,14 +30,19 @@ module.exports = class ValidatedCertificate extends CustomAWSResource {
         return this.serviceMethod('describe')(this.props).then(data => {
             if (data.Certificate.DomainValidationOptions.ValidationStatus === 'SUCCESS') return data.Certificate;
             if (data.Certificate.DomainValidationOptions.ValidationStatus === 'FAILED') return Promise.reject();
-            return new AWS.StepFunctions().startExecution({
-                stateMachineArn: process.env.DelayedFunctionCall,
-                name: Math.random().toString().slice(2),
-                input: JSON.stringify({
-                    functionArn: this.context.invokedFunctionArn,
-                    request: this.req
-                })
-            }).promise().then(() => Promise.reject('DELAYED'))
+            const sf = new AWS.StepFunctions();
+            const { stateMachineArn } = process.env;
+            return sf.updateStateMachine({
+                stateMachineArn,
+                definition: delayedInvocation(this.req.ResourceProperties.ServiceToken)
+            }).promise()
+                .then(data =>
+                    sf.startExecution({
+                        stateMachineArn,
+                        name: Math.random().toString().slice(2),
+                        input: JSON.stringify(this.req)
+                    }).promise())
+                .then(() => Promise.reject('DELAYED'))
         });
     }
 
