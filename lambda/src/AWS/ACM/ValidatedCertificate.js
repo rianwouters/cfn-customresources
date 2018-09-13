@@ -43,9 +43,11 @@ module.exports = class ValidatedCertificate extends CustomAWSResource {
     create() {
         this.physicalId = `V${this.props.CertificateArn}`;
         return this.resourceMethod('describe')(this.props).then(data => {
-            const { ValidationStatus } =  data.Certificate.DomainValidationOptions[0];
+            const cert = data.Certificate;
+            const {ValidationStatus} =  cert.DomainValidationOptions[0];
+            console.log(ValidationStatus, JSON.stringify(cert));
             switch (ValidationStatus) {
-                case 'SUCCESS': return data.Certificate;
+                case 'SUCCESS': return cert;
                 case 'FAILED': return Promise.reject("Certificate failed to validate");
                 default: return this.retryLater().then(() => Promise.reject('DELAYED'));
             }
