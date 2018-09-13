@@ -44,7 +44,7 @@ module.exports = class ValidatedCertificate extends CustomAWSResource {
         this.physicalId = `V${this.props.CertificateArn}`;
         return this.resourceMethod('describe')(this.props).then(data => {
             const cert = data.Certificate;
-            const {ValidationStatus} =  cert.DomainValidationOptions[0];
+            const {ValidationStatus} = cert.DomainValidationOptions[0];
             console.log(ValidationStatus, JSON.stringify(cert));
             switch (ValidationStatus) {
                 case 'SUCCESS': return cert;
