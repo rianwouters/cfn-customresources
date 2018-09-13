@@ -47,7 +47,7 @@ module.exports = class ValidatedCertificate extends CustomAWSResource {
             switch (ValidationStatus) {
                 case 'SUCCESS': return data.Certificate;
                 case 'FAILED': return Promise.reject("Certificate failed to validate");
-                default: return this.retryLater().then(() => Promise.reject('DELAYED');
+                default: return this.retryLater().then(() => Promise.reject('DELAYED'));
             }
         });
     }
