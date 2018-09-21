@@ -19,6 +19,8 @@ const delayedInvocation = lambdaArn =>
         }
     });
 
+const timeout = delay => new Promise(resolve => setTimeout(resolve, delay));
+
 module.exports = class ValidatedCertificate extends CustomAWSResource {
 
     get type() {
@@ -31,13 +33,15 @@ module.exports = class ValidatedCertificate extends CustomAWSResource {
         return sf.updateStateMachine({
             stateMachineArn,
             definition: delayedInvocation(this.req.ResourceProperties.ServiceToken)
-        }).promise().then(() =>
-            sf.startExecution({
-                stateMachineArn,
-                name: Math.random().toString().slice(2),
-                input: JSON.stringify(this.req)
-            }).promise()
-        )
+        }).promise()
+            .then(() => timeout(10000))
+            .then(() =>
+                sf.startExecution({
+                    stateMachineArn,
+                    name: Math.random().toString().slice(2),
+                    input: JSON.stringify(this.req)
+                }).promise()
+            )
     }
 
     create() {
