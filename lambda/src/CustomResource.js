@@ -29,7 +29,7 @@ module.exports = class CustomResource {
 
         const failed = err => {
             console.error(err);
-            if (err !== "DELAYED") respond(response.FAILED, {Id: req.PhysicalResourceId});
+            if (err !== "DELAYED") respond(response.FAILED, {Id: req.PhysicalResourceId}) else callback();
         };
 
         try {
