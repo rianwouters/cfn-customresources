@@ -7,15 +7,13 @@ module.exports = class CustomResource {
     constructor(req, context) {
         this.req = req;
         this.context = context;
-        this.stackId = req.StackId;
-        this.logicalId = req.LogicalResourceId;
-        this.reqId = req.RequestId;
         this.props = _.omit(req.ResourceProperties, 'ServiceToken');
         this.physicalId = req.PhysicalResourceId;
     }
 
     Name() {
-        return `${this.stackId.split('/')[1].slice(-13)}-${this.logicalId.substr(0,13)}-${this.reqId.slice(-12)}`;
+        const {StackId, LogicalResourceId, RequestId} = this.req;
+        return `${StackId.split('/')[1].slice(-13)}-${LogicalResourceId.substr(0,13)}-${RequestId.slice(-12)}`;
     }
 
     static create(req, context) {
