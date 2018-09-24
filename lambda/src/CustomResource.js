@@ -9,7 +9,7 @@ module.exports = class CustomResource {
         this.context = context;
         this.stackId = req.StackId;
         this.logicalId = req.LogicalResourceId;
-        this.reqId = req.requestId;
+        this.reqId = req.RequestId;
         this.props = _.omit(req.ResourceProperties, 'ServiceToken');
         this.physicalId = req.PhysicalResourceId;
     }
