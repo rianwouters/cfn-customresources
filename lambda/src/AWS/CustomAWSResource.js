@@ -29,12 +29,12 @@ module.exports = class CustomAWSResource extends CustomResource {
     }
 
     serviceMethod(name) {
-        const serviceCall = (...args) => (console.log('serviceMethod:', name, JSON.stringify(args)), this.service[name](...args).promise());
-        return (...args) => serviceCall(...args).catch(err => {
+        const method = (...args) => this.service[name](...args).promise().catch(err => {
             if (err) console.log(typeof err, JSON.stringify(err));
-            if ([err.constructor.name, err.code].includes("TooManyRequestsException")) return serviceCall(...args);
+            if ([err.constructor.name, err.code].includes("TooManyRequestsException")) return method(...args);
             throw err;
-        })
+        });
+        return method;
     }
 
     resourceMethod(name) {
