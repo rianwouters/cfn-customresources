@@ -31,7 +31,8 @@ module.exports = class CustomAWSResource extends CustomResource {
     serviceMethod(name) {
         const serviceCall = (...args) => (console.log('serviceMethod:', name, JSON.stringify(args)), this.service[name](...args).promise());
         return (...args) => serviceCall(...args).catch(err => {
-            if (err.constructor.name === "TooManyRequestsException") return serviceCall(...args);
+            if (err) console.log(typeof err, JSON.stringify(err));
+            if ([err.constructor.name, err.code].includes("TooManyRequestsException")) return serviceCall(...args);
             throw err;
         })
     }
