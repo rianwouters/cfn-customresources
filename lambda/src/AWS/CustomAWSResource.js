@@ -31,7 +31,7 @@ module.exports = class CustomAWSResource extends CustomResource {
     serviceMethod(name) {
         const method = (...args) => this.service[name](...args).promise().catch(err => {
             if (err) console.log(typeof err, JSON.stringify(err));
-            if ([err.constructor.name, err.code].includes("TooManyRequestsException")) return method(...args);
+            if (err.code === "TooManyRequestsException") return method(...args);
             throw err;
         });
         return method;
@@ -55,6 +55,6 @@ module.exports = class CustomAWSResource extends CustomResource {
 
     Delete() {
         return this.delete()
-            .catch(err => [err.constructor.name, err.code].includes("NotFoundException") || Promise.reject(err));
+            .catch(err => (err.code === "NotFoundException" && {}) || Promise.reject(err));
     }
 };
