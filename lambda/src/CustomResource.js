@@ -38,7 +38,7 @@ module.exports = class CustomResource {
 
             const success = data => {
                 console.log(JSON.stringify(data));
-                respond(SUCCESS, Object.assign(data, {Id: resource.physicalId}));
+                respond(SUCCESS, Object.assign(data || {}, {Id: resource.physicalId}));
             };
 
             resource[req.RequestType]().then(success, failed);
