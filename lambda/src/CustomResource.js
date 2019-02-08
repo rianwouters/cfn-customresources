@@ -1,5 +1,5 @@
 'use strict';
-const response = require('cfn-response');
+const {send, SUCCESS, FAILED} = require('cfn-response');
 const _ = require('underscore');
 
 module.exports = class CustomResource {
@@ -24,12 +24,12 @@ module.exports = class CustomResource {
 
     static request(req, context, callback) {
         const respond = (status, data) => {
-            response.send(req, status, data, data.Id, callback);
+            send(req, status, data, data.Id, callback);
         };
 
         const failed = err => {
             console.error(err);
-            if (err !== "DELAYED") respond(response.FAILED, {Id: req.PhysicalResourceId}); else callback();
+            if (err !== "DELAYED") respond(FAILED, {Id: req.PhysicalResourceId}); else callback();
         };
 
         try {
@@ -38,7 +38,7 @@ module.exports = class CustomResource {
 
             const success = data => {
                 console.log(JSON.stringify(data));
-                respond(response.SUCCESS, Object.assign(data, {Id: resource.physicalId}));
+                respond(SUCCESS, Object.assign(data, {Id: resource.physicalId}));
             };
 
             resource[req.RequestType]().then(success, failed);
