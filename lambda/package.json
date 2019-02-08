@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "aws-sdk": "^2.249.1",
+    "aws-sdk": "^2.399.0",
     "cfn-response": "github:rianwouters/cfn-response",
     "sinon": "^6.3.5",
     "underscore": "^1.9.1"
