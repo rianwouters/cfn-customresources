@@ -133,7 +133,6 @@ Note that in case the resource cannot be deleted, cloudformation will normally d
 A CustomAWSResource that updates a resource by using the update<Resource> method of the associated SDK service.
 
 ## TODOs
-- Move classes into a package directory hierarchy (AWS/ElasticTranscoder/Pipeline, etc.)
 - Write unit tests. This module should have been developed with TDD of course :-(
 
 
