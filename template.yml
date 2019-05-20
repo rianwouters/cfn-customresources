@@ -26,7 +26,7 @@ Resources:
       Handler: src/CustomResource.request
       Code: lambda
       Role: !GetAtt Role.Arn
-      Runtime: nodejs6.10
+      Runtime: nodejs10.x
       Timeout : 15
       Environment:
         Variables:
